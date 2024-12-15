@@ -46,6 +46,16 @@ class ChessBoard
     return nil if row < MIN_SIZE || row > MAX_SIZE || col < MIN_SIZE || col > MAX_SIZE
     @board[row][col].joint_squares
   end
+
+  def knight_moves(start, ending)
+    #Filtering input
+    return if !start.is_a?(Array) || !ending.is_a?(Array)
+    return if start.size != 2 || ending.size !=2 
+    return if !start[0].is_a?(Integer) || !start[1].is_a?(Integer) || !ending[0].is_a?(Integer)|| !ending[1].is_a?(Integer)
+    return if start[0] < MIN_SIZE || start[1] < MIN_SIZE || ending[0] < MIN_SIZE || ending[1] < MIN_SIZE
+    return if start[0] > MAX_SIZE || start[1] > MAX_SIZE || ending[0] > MAX_SIZE || ending[1] > MAX_SIZE
+    # puts "Correct" #Uncomment for testing filtering
+  end
   
   private 
 
