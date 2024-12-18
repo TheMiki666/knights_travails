@@ -4,13 +4,16 @@ class ChessBoard
 
   class Square
 
-    attr_reader :joint_squares
+    attr_reader :joint_squares, :row, :col
     
     def initialize(r,c)
       @row = r
       @col = c
-      @visited = false
       @joint_squares = find_joints
+    end
+
+    def copy
+      Square.new(@row, @col)
     end
 
     private
@@ -38,6 +41,58 @@ class ChessBoard
 
   end #of class Square
 
+  class Path
+    attr_accessor :way
+    
+    def initialize
+      clear
+    end
+  
+    def clear
+      @way = []
+    end
+
+    def copy
+      new_path = Path.new
+      @way.each {|square| new_path.way.push(square.copy)}
+      new_path
+    end
+
+    def add_square(square)
+      @way.push(square)
+    end
+
+    def give_way
+      output = []
+        @way.each {|square| output.push([square.row, square.col])}
+      output
+    end
+
+    #Return an array with possible paths with one more step
+    def add_step(board)
+      last_square = @way[@way.length-1]
+      return self if last_square.nil?
+      array_of_paths = Array.new
+      last_square.joint_squares.each do |coord|
+        new_square = board.get_square_object(coord[0], coord[1])
+        already_walked = false
+        @way.each do |prev_square|
+          if prev_square.row == new_square.row &&  prev_square.col == new_square.col 
+            already_walked = true
+            break
+          end 
+        end
+        if !already_walked
+          new_path = self.copy
+          new_path.add_square(new_square)
+          array_of_paths.push(new_path)
+        end
+      end
+      array_of_paths
+    end
+
+  end #of class path
+
   def initialize
     create_board
   end
@@ -47,6 +102,11 @@ class ChessBoard
     @board[row][col].joint_squares
   end
 
+  def get_square_object(row, col)
+    return nil if row < MIN_SIZE || row > MAX_SIZE || col < MIN_SIZE || col > MAX_SIZE
+    @board[row][col]
+  end
+
   def knight_moves(start, ending)
     #Filtering input
     return if !start.is_a?(Array) || !ending.is_a?(Array)
@@ -54,7 +114,14 @@ class ChessBoard
     return if !start[0].is_a?(Integer) || !start[1].is_a?(Integer) || !ending[0].is_a?(Integer)|| !ending[1].is_a?(Integer)
     return if start[0] < MIN_SIZE || start[1] < MIN_SIZE || ending[0] < MIN_SIZE || ending[1] < MIN_SIZE
     return if start[0] > MAX_SIZE || start[1] > MAX_SIZE || ending[0] > MAX_SIZE || ending[1] > MAX_SIZE
-    # puts "Correct" #Uncomment for testing filtering
+    puts "Correct" #Uncomment for testing filtering
+  end
+
+  def initiate_path(row, col)
+    return nil if row < MIN_SIZE || row > MAX_SIZE || col < MIN_SIZE || col > MAX_SIZE
+    path = Path.new
+    path.add_square(get_square_object(row,col))
+    path
   end
   
   private 
@@ -66,12 +133,6 @@ class ChessBoard
       (MIN_SIZE..MAX_SIZE).each do |c|
         @board[r][c] = Square.new(r,c)
       end
-    end
-  end
-
-  def clear
-    @board.each do |row|
-      row.each {@visited = false}
     end
   end
 

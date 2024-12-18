@@ -1,56 +1,27 @@
 require_relative "lib/board"
-
 board = ChessBoard.new
 
-#Testing get_joints
-#Impossible squares
-p board.get_joints(8,4)
-p board.get_joints(4,9)
-p board.get_joints(-1,4)
-p board.get_joints(4,-3)
+#Testing copy
+sq = ChessBoard::Square.new(4,4) 
+p sq #ok
 
-#corners
-p board.get_joints(7,7)
-p board.get_joints(0,0)
-p board.get_joints(7,0)
-p board.get_joints(0,7)
+nsq = sq.copy
+p nsq #ok
 
-#near corners
-p board.get_joints(6,0)
-p board.get_joints(6,7)
+#Testing add_step
+p path=board.initiate_path(0,0) #ok
+new_path=path.copy
+p new_path #ok
+p path.give_way #ok
+new_paths = path.add_step(board)
+p new_paths
+new_paths.each {|x| p x.give_way} #ok
+another_paths = new_paths[0].add_step(board)
+another_paths.each {|x| p x.give_way} #ok
+more_paths = another_paths[4].add_step(board)
+more_paths.each {|x| p x.give_way} #ok
+i_love_paths = more_paths[1].add_step(board)
+i_love_paths.each {|x| p x.give_way} #ok
+fancy_paths = i_love_paths[4].add_step(board)
+fancy_paths.each {|x| p x.give_way} #PERFECT! It doesn't repeat visited squares!!
 
-#sides 
-p board.get_joints(0,3)
-p board.get_joints(4,7)
-
-#near sides
-p board.get_joints(2,1)
-p board.get_joints(6,3)
-
-#center
-p board.get_joints(4,4)
-p board.get_joints(4,3)
-
-#ALL CORRECT
-
-#Testing knight_moves input filter
-p board.knight_moves([0,0],nil)
-p board.knight_moves([0,0],"cow")
-p board.knight_moves([0,0],["cow"])
-p board.knight_moves([0,0],["cow, chicken"])
-p board.knight_moves([0,0],[nil, nil])
-p board.knight_moves([0,0],[1])
-p board.knight_moves([0,0],[1,1,1])
-p board.knight_moves([0,0],[1,8])
-p board.knight_moves([0,0],[-1,0])
-p board.knight_moves([0,0],[0,0])
-p board.knight_moves(nil,[7,7])
-p board.knight_moves("cow",[7,7])
-p board.knight_moves(["cow"],[7,7])
-p board.knight_moves(["cow, chicken"],[7,7])
-p board.knight_moves([nil, nil],[7,7])
-p board.knight_moves([1],[7,7])
-p board.knight_moves([1,1,1],[7,7])
-p board.knight_moves([1,8],[7,7])
-p board.knight_moves([-1,0],[7,7])
-p board.knight_moves([0,0],[7,7])
