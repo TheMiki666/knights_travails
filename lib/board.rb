@@ -68,6 +68,10 @@ class ChessBoard
       output
     end
 
+    def get_last_square
+      @way[@way.size - 1]
+    end
+
     #Return an array with possible paths with one more step
     def add_step(board)
       last_square = @way[@way.length-1]
@@ -114,7 +118,10 @@ class ChessBoard
     return if !start[0].is_a?(Integer) || !start[1].is_a?(Integer) || !ending[0].is_a?(Integer)|| !ending[1].is_a?(Integer)
     return if start[0] < MIN_SIZE || start[1] < MIN_SIZE || ending[0] < MIN_SIZE || ending[1] < MIN_SIZE
     return if start[0] > MAX_SIZE || start[1] > MAX_SIZE || ending[0] > MAX_SIZE || ending[1] > MAX_SIZE
-    puts "Correct" #Uncomment for testing filtering
+    # puts "Correct" #Uncomment for testing filtering
+    
+    path = find_best_path(start, ending)
+    path.give_way
   end
 
   def initiate_path(row, col)
@@ -134,6 +141,21 @@ class ChessBoard
   end
   
   private 
+
+  def find_best_path(start, ending)
+    path_array = [initiate_path(start[0],start[1])]
+    found = nil
+    while found.nil?
+      path_array.each do |path| 
+        if path.get_last_square.row == ending[0] && path.get_last_square.col == ending[1]
+          found = path
+          break
+        end
+      end
+      path_array = propagate_paths(path_array) if found.nil?
+    end
+    found
+  end
 
   def create_board
     size = MAX_SIZE - MIN_SIZE + 1

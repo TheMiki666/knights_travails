@@ -1,79 +1,44 @@
 require_relative "lib/board"
 board = ChessBoard.new
 
-#Testing copy
-sq = ChessBoard::Square.new(4,4) 
-p sq #ok
+puts "Testing knight moves"
+#Impossible squares (already tested in test1)
+p board.knight_moves([0,-1], [0,0])
+p board.knight_moves([7,4], [8,4])
 
-nsq = sq.copy
-p nsq #ok
+# 0 moves
+p board.knight_moves([0,0], [0,0])
+p board.knight_moves([7,4], [7,4])
+p board.knight_moves([2,5], [2,5])
 
-#Testing add_step
-p path=board.initiate_path(0,0) #ok
-new_path=path.copy
-p new_path #ok
-p path.give_way #ok
-new_paths = path.add_step(board)
-p new_paths
-new_paths.each {|x| p x.give_way} #ok
-another_paths = new_paths[0].add_step(board)
-another_paths.each {|x| p x.give_way} #ok
-more_paths = another_paths[4].add_step(board)
-more_paths.each {|x| p x.give_way} #ok
-i_love_paths = more_paths[1].add_step(board)
-i_love_paths.each {|x| p x.give_way} #ok
-fancy_paths = i_love_paths[4].add_step(board)
-fancy_paths.each {|x| p x.give_way} #PERFECT! It doesn't repeat visited squares!!
-puts "-----------------------"
-puts "Testing propagate paths"
-path=board.initiate_path(0,0)
-p path.give_way
-puts "----"
-m1 = [path]
-m2 = board.propagate_paths(m1)
-m2.each {|x| p x.give_way} #ok
-p m2.size
-puts "----"
-m3 = board.propagate_paths(m2)
-m3.each {|x| p x.give_way} #ok
-p m3.size
-puts "----"
-m4 = board.propagate_paths(m3)
-m4.each {|x| p x.give_way} #ok
-p m4.size
-puts "----"
-m5 = board.propagate_paths(m4)
-m5.each {|x| p x.give_way} #ok
-p m5.size
-puts "----"
-m6 = board.propagate_paths(m5)
-m6.each {|x| p x.give_way} #ok
-p m6.size
-puts "----"
-puts "-----------------------"
-puts "Testing propagate paths"
-path=board.initiate_path(4,4)
-p path.give_way
-puts "----"
-m1 = [path]
-m2 = board.propagate_paths(m1)
-m2.each {|x| p x.give_way} #ok
-p m2.size
-puts "----"
-m3 = board.propagate_paths(m2)
-m3.each {|x| p x.give_way} #ok
-p m3.size
-puts "----"
-m4 = board.propagate_paths(m3)
-m4.each {|x| p x.give_way} #ok
-p m4.size
-puts "----"
-m5 = board.propagate_paths(m4)
-# m5.each {|x| p x.give_way} #ok
-p m5.size
-puts "----"
-m6 = board.propagate_paths(m5)
-# m6.each {|x| p x.give_way} #ok
-p m6.size
-puts "----"
+# 1 move
+p board.knight_moves([7,7], [6,5])
+p board.knight_moves([4,3], [2,4])
+p board.knight_moves([3,7], [5,6])
 
+# 2 moves
+p board.knight_moves([4,3], [3,4])
+p board.knight_moves([0,6], [1,7])
+p board.knight_moves([0,2], [0,6])
+p board.knight_moves([3,3], [6,6])
+p board.knight_moves([2,5], [6,3])
+p board.knight_moves([3,1], [5,1])
+
+# 3 moves
+p board.knight_moves([3,3], [3,4])
+p board.knight_moves([0,1], [5,5])
+p board.knight_moves([7,0], [4,6])
+p board.knight_moves([0,7], [6,6])
+
+# 4 moves
+p board.knight_moves([2,5], [4,3])
+p board.knight_moves([0,0], [1,1])
+p board.knight_moves([0,0], [6,6])
+
+# 5 moves
+p board.knight_moves([7,7], [3,0])
+p board.knight_moves([0,0], [6,7])
+
+# 6 moves
+p board.knight_moves([7,0], [0,7])
+p board.knight_moves([0,0], [7,7])
