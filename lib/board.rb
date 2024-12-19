@@ -123,6 +123,15 @@ class ChessBoard
     path.add_square(get_square_object(row,col))
     path
   end
+
+  def propagate_paths(paths_array)
+    return nil if paths_array.nil?
+    output_paths = Array.new
+    paths_array.each do |path|
+      output_paths = output_paths + path.add_step(self)
+    end
+    output_paths
+  end
   
   private 
 
