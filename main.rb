@@ -42,3 +42,5 @@ p board.knight_moves([0,0], [6,7])
 # 6 moves
 p board.knight_moves([7,0], [0,7])
 p board.knight_moves([0,0], [7,7])
+
+#THE METHOD WORKS!!!

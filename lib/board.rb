@@ -101,16 +101,6 @@ class ChessBoard
     create_board
   end
 
-  def get_joints(row, col)
-    return nil if row < MIN_SIZE || row > MAX_SIZE || col < MIN_SIZE || col > MAX_SIZE
-    @board[row][col].joint_squares
-  end
-
-  def get_square_object(row, col)
-    return nil if row < MIN_SIZE || row > MAX_SIZE || col < MIN_SIZE || col > MAX_SIZE
-    @board[row][col]
-  end
-
   def knight_moves(start, ending)
     #Filtering input
     return if !start.is_a?(Array) || !ending.is_a?(Array)
@@ -124,20 +114,9 @@ class ChessBoard
     path.give_way
   end
 
-  def initiate_path(row, col)
+  def get_square_object(row, col)
     return nil if row < MIN_SIZE || row > MAX_SIZE || col < MIN_SIZE || col > MAX_SIZE
-    path = Path.new
-    path.add_square(get_square_object(row,col))
-    path
-  end
-
-  def propagate_paths(paths_array)
-    return nil if paths_array.nil?
-    output_paths = Array.new
-    paths_array.each do |path|
-      output_paths = output_paths + path.add_step(self)
-    end
-    output_paths
+    @board[row][col]
   end
   
   private 
@@ -167,5 +146,25 @@ class ChessBoard
     end
   end
 
+  def initiate_path(row, col)
+    return nil if row < MIN_SIZE || row > MAX_SIZE || col < MIN_SIZE || col > MAX_SIZE
+    path = Path.new
+    path.add_square(get_square_object(row,col))
+    path
+  end
+
+  def propagate_paths(paths_array)
+    return nil if paths_array.nil?
+    output_paths = Array.new
+    paths_array.each do |path|
+      output_paths = output_paths + path.add_step(self)
+    end
+    output_paths
+  end
+
+  def get_joints(row, col)
+    return nil if row < MIN_SIZE || row > MAX_SIZE || col < MIN_SIZE || col > MAX_SIZE
+    @board[row][col].joint_squares
+  end
 
 end
